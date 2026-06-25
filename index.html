@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HolaTurno — Reservas online para profesionales y negocios</title>
+  <meta name="description" content="Creá tu página de reservas, organizá tus horarios y recibí turnos online con HolaTurno.">
+  <meta name="theme-color" content="#18181B">
+  <meta property="og:title" content="HolaTurno — Tu agenda online, siempre disponible">
+  <meta property="og:description" content="Compartí tu link, mostrale tus servicios a tus clientes y recibí reservas sin depender de mensajes.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://holaturno.com">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+          },
+          colors: {
+            ink: "#18181B",
+            brand: {
+              50: "#F5F3FF",
+              100: "#EDE9FE",
+              200: "#DDD6FE",
+              300: "#C4B5FD",
+              400: "#A78BFA",
+              500: "#8B5CF6",
+              600: "#7C3AED",
+              700: "#6D28D9",
+              800: "#5B21B6",
+              900: "#4C1D95",
+            },
+          },
+          boxShadow: {
+            soft: "0 24px 70px rgba(24,24,27,.10)",
+            glow: "0 16px 40px rgba(124,58,237,.24)",
+            card: "0 14px 40px rgba(24,24,27,.08)",
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { min-height: 100vh; }
+    .glass {
+      background: rgba(255,255,255,.82);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .faq-content {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows .28s ease;
+    }
+    .faq-content > div { overflow: hidden; }
+    .faq-item[data-open="true"] .faq-content { grid-template-rows: 1fr; }
+    .faq-item[data-open="true"] .faq-icon { transform: rotate(45deg); }
+  </style>
+</head>
+
+<body class="bg-[#F7F7FA] font-sans text-ink antialiased">
+  <div class="relative overflow-hidden">
+    <div class="pointer-events-none absolute inset-0">
+      <div class="absolute -left-28 -top-28 h-96 w-96 rounded-full bg-brand-200/55 blur-3xl"></div>
+      <div class="absolute -right-24 top-1/3 h-80 w-80 rounded-full bg-fuchsia-100/70 blur-3xl"></div>
+      <div class="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-emerald-50 blur-3xl"></div>
+    </div>
+
+    <header class="sticky top-0 z-50 border-b border-white/70 bg-white/70 backdrop-blur-xl">
+      <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8 lg:px-10">
+        <a href="#inicio" class="flex items-center gap-3" aria-label="HolaTurno">
+          <span class="grid h-10 w-10 place-items-center rounded-2xl bg-ink text-white shadow-lg shadow-zinc-900/15">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 3v3M17 3v3M4.5 9.5h15M6 5h12a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/>
+              <path d="m9 14 2 2 4-4"/>
+            </svg>
+          </span>
+          <span class="text-lg font-black tracking-tight">HolaTurno</span>
+        </a>
+
+        <nav class="hidden items-center gap-7 lg:flex">
+          <a href="#como-funciona" class="text-sm font-bold text-zinc-500 transition hover:text-zinc-950">Cómo funciona</a>
+          <a href="#beneficios" class="text-sm font-bold text-zinc-500 transition hover:text-zinc-950">Beneficios</a>
+          <a href="#para-quien" class="text-sm font-bold text-zinc-500 transition hover:text-zinc-950">Para quién es</a>
+          <a href="#preguntas" class="text-sm font-bold text-zinc-500 transition hover:text-zinc-950">Preguntas</a>
+        </nav>
+
+        <div class="hidden items-center gap-3 lg:flex">
+          <a href="#contacto" class="rounded-2xl border border-zinc-200 bg-white px-4 py-2.5 text-sm font-extrabold text-zinc-700 transition hover:bg-zinc-50">
+            Contacto
+          </a>
+          <a href="#contacto" class="rounded-2xl bg-ink px-4 py-2.5 text-sm font-extrabold text-white shadow-lg shadow-zinc-900/15 transition hover:-translate-y-0.5 hover:bg-zinc-800">
+            Quiero probarlo
+          </a>
+        </div>
+
+        <button id="mobileMenuButton" type="button" class="grid h-10 w-10 place-items-center rounded-xl border border-zinc-200 bg-white text-zinc-700 lg:hidden" aria-label="Abrir menú" aria-expanded="false">
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 7h16M4 12h16M4 17h16"/>
+          </svg>
+        </button>
+      </div>
+
+      <div id="mobileMenu" class="hidden border-t border-zinc-100 bg-white px-5 py-4 lg:hidden">
+        <nav class="grid gap-2">
+          <a href="#como-funciona" class="mobile-link rounded-xl px-3 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-50">Cómo funciona</a>
+          <a href="#beneficios" class="mobile-link rounded-xl px-3 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-50">Beneficios</a>
+          <a href="#para-quien" class="mobile-link rounded-xl px-3 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-50">Para quién es</a>
+          <a href="#preguntas" class="mobile-link rounded-xl px-3 py-2.5 text-sm font-bold text-zinc-600 hover:bg-zinc-50">Preguntas frecuentes</a>
+          <a href="#contacto" class="mobile-link mt-2 rounded-xl bg-ink px-3 py-3 text-center text-sm font-extrabold text-white">Quiero conocer HolaTurno</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="inicio" class="relative z-10">
+      <section class="mx-auto grid min-h-[760px] max-w-7xl items-center gap-12 px-5 py-16 sm:px-8 lg:grid-cols-[.92fr_1.08fr] lg:px-10 lg:py-24">
+        <div>
+          <span class="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white/80 px-3 py-1.5 text-xs font-extrabold text-brand-700 shadow-sm">
+            <span class="grid h-5 w-5 place-items-center rounded-full bg-brand-100">✦</span>
+            Reservas online para profesionales y negocios
+          </span>
+
+          <h1 class="mt-6 max-w-2xl text-5xl font-black leading-[1.02] tracking-[-0.055em] text-zinc-950 sm:text-6xl lg:text-7xl">
+            Menos mensajes.
+            <span class="block bg-gradient-to-r from-brand-700 to-fuchsia-600 bg-clip-text text-transparent">Más turnos.</span>
+          </h1>
+
+          <p class="mt-6 max-w-xl text-lg leading-8 text-zinc-600">
+            Creá tu página de reservas, mostrale tus servicios a tus clientes y organizá tu agenda desde un solo lugar.
+          </p>
+
+          <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+            <a href="#contacto" class="flex items-center justify-center gap-2 rounded-2xl bg-ink px-6 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-zinc-900/15 transition hover:-translate-y-0.5 hover:bg-zinc-800">
+              Quiero conocer HolaTurno
+              <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="m9 18 6-6-6-6"/>
+              </svg>
+            </a>
+            <a href="#como-funciona" class="flex items-center justify-center rounded-2xl border border-zinc-200 bg-white px-6 py-3.5 text-sm font-extrabold text-zinc-700 transition hover:bg-zinc-50">
+              Ver cómo funciona
+            </a>
+          </div>
+
+          <div class="mt-8 grid max-w-xl gap-3 sm:grid-cols-3">
+            <div class="rounded-2xl border border-white bg-white/70 p-4 backdrop-blur">
+              <p class="text-sm font-black text-zinc-900">Tu propio link</p>
+              <p class="mt-1 text-xs leading-5 text-zinc-500">holaturno.com/tu-negocio</p>
+            </div>
+            <div class="rounded-2xl border border-white bg-white/70 p-4 backdrop-blur">
+              <p class="text-sm font-black text-zinc-900">Disponible 24/7</p>
+              <p class="mt-1 text-xs leading-5 text-zinc-500">Tus clientes reservan cuando quieren.</p>
+            </div>
+            <div class="rounded-2xl border border-white bg-white/70 p-4 backdrop-blur">
+              <p class="text-sm font-black text-zinc-900">Configuración simple</p>
+              <p class="mt-1 text-xs leading-5 text-zinc-500">Sin conocimientos técnicos.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative mx-auto w-full max-w-2xl">
+          <div class="absolute -left-6 top-16 z-20 hidden rounded-2xl border border-white bg-white/90 px-4 py-3 shadow-card backdrop-blur sm:block">
+            <p class="text-[10px] font-extrabold uppercase tracking-[.14em] text-zinc-400">Nueva reserva</p>
+            <p class="mt-1 text-sm font-black text-zinc-900">Manicuría rusa</p>
+            <p class="mt-1 text-xs font-semibold text-zinc-500">Miércoles · 16:30</p>
+          </div>
+
+          <div class="absolute -right-5 bottom-12 z-20 hidden rounded-2xl border border-white bg-white/90 px-4 py-3 shadow-card backdrop-blur sm:block">
+            <div class="flex items-center gap-3">
+              <span class="grid h-9 w-9 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="m5 12 4 4L19 6"/>
+                </svg>
+              </span>
+              <div>
+                <p class="text-[10px] font-extrabold uppercase tracking-[.14em] text-zinc-400">Confirmado</p>
+                <p class="mt-0.5 text-sm font-black text-zinc-900">Turno reservado</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="relative overflow-hidden rounded-[32px] border border-white bg-white/92 p-3 shadow-soft backdrop-blur">
+            <div class="overflow-hidden rounded-[25px] border border-zinc-100 bg-[#FAFAFC]">
+              <div class="flex items-center justify-between border-b border-zinc-100 bg-white px-4 py-3">
+                <div class="flex items-center gap-2">
+                  <span class="h-2.5 w-2.5 rounded-full bg-rose-300"></span>
+                  <span class="h-2.5 w-2.5 rounded-full bg-amber-300"></span>
+                  <span class="h-2.5 w-2.5 rounded-full bg-emerald-300"></span>
+                </div>
+                <div class="rounded-full bg-zinc-100 px-4 py-1.5 text-[10px] font-bold text-zinc-500">holaturno.com/estetica-olivia</div>
+                <span class="w-12"></span>
+              </div>
+
+              <div class="grid lg:grid-cols-[205px_1fr]">
+                <aside class="border-b border-zinc-100 bg-zinc-50/70 p-5 lg:border-b-0 lg:border-r">
+                  <div class="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-brand-600 to-fuchsia-500 text-sm font-black text-white shadow-glow">EO</div>
+                  <p class="mt-4 text-[10px] font-extrabold uppercase tracking-[.14em] text-zinc-400">Estética Olivia</p>
+                  <h3 class="mt-1 text-lg font-black leading-tight text-zinc-950">Elegí tu tratamiento</h3>
+
+                  <div class="mt-5 space-y-2">
+                    <div class="rounded-xl border border-brand-200 bg-brand-50 p-3">
+                      <p class="text-xs font-black text-zinc-900">Manicuría rusa</p>
+                      <p class="mt-1 text-[10px] font-semibold text-zinc-500">75 min · $25.000</p>
+                    </div>
+                    <div class="rounded-xl border border-zinc-200 bg-white p-3">
+                      <p class="text-xs font-black text-zinc-900">Criolipólisis</p>
+                      <p class="mt-1 text-[10px] font-semibold text-zinc-500">60 min · $48.000</p>
+                    </div>
+                    <div class="rounded-xl border border-zinc-200 bg-white p-3">
+                      <p class="text-xs font-black text-zinc-900">Depilación láser</p>
+                      <p class="mt-1 text-[10px] font-semibold text-zinc-500">30 min · desde $18.000</p>
+                    </div>
+                  </div>
+                </aside>
+
+                <div class="p-5 sm:p-6">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p class="text-[10px] font-extrabold uppercase tracking-[.14em] text-brand-700">Seleccioná una fecha</p>
+                      <h3 class="mt-1 text-base font-black text-zinc-950">Junio 2026</h3>
+                    </div>
+                    <div class="flex gap-2">
+                      <span class="grid h-8 w-8 place-items-center rounded-lg border border-zinc-200 bg-white text-zinc-400">‹</span>
+                      <span class="grid h-8 w-8 place-items-center rounded-lg border border-zinc-200 bg-white text-zinc-600">›</span>
+                    </div>
+                  </div>
+
+                  <div class="mt-5 grid grid-cols-7 gap-1.5 text-center text-[8px] font-extrabold uppercase tracking-wide text-zinc-400">
+                    <span>D</span><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span>
+                  </div>
+
+                  <div class="mt-2 grid grid-cols-7 gap-1.5 text-center text-[10px] font-bold">
+                    <span></span><span class="grid aspect-square place-items-center rounded-lg text-zinc-300">1</span><span class="grid aspect-square place-items-center rounded-lg text-zinc-300">2</span><span class="grid aspect-square place-items-center rounded-lg text-zinc-300">3</span><span class="grid aspect-square place-items-center rounded-lg bg-white text-zinc-800">4</span><span class="grid aspect-square place-items-center rounded-lg bg-white text-zinc-800">5</span><span class="grid aspect-square place-items-center rounded-lg bg-white text-zinc-800">6</span>
+                    <span class="grid aspect-square place-items-center rounded-lg text-zinc-300">7</span><span class="grid aspect-square place-items-center rounded-lg bg-white text-zinc-800">8</span><span class="grid aspect-square place-items-center rounded-lg bg-white text-zinc-800">9</span><span class="grid aspect-square place-items-center rounded-lg bg-brand-600 text-white shadow-glow">10</span><span class="grid aspect-square place-items-center rounded-lg bg-white text-zinc-800">11</span><span class="grid aspect-square place-items-center rounded-lg bg-white text-zinc-800">12</span><span class="grid aspect-square place-items-center rounded-lg bg-white text-zinc-800">13</span>
+                    <span class="grid aspect-square place-items-center rounded-lg text-zinc-300">14</span><span class="grid aspect-square place-items-center rounded-lg bg-white text-zinc-800">15</span><span class="grid aspect-square place-items-center rounded-lg bg-white text-zinc-800">16</span><span class="grid aspect-square place-items-center rounded-lg bg-white text-zinc-800">17</span><span class="grid aspect-square place-items-center rounded-lg bg-white text-zinc-800">18</span><span class="grid aspect-square place-items-center rounded-lg bg-white text-zinc-800">19</span><span class="grid aspect-square place-items-center rounded-lg bg-white text-zinc-800">20</span>
+                  </div>
+
+                  <div class="mt-5 border-t border-zinc-100 pt-4">
+                    <p class="text-[10px] font-extrabold uppercase tracking-[.14em] text-zinc-400">Horarios disponibles</p>
+                    <div class="mt-3 grid grid-cols-3 gap-2">
+                      <span class="rounded-lg border border-brand-200 bg-brand-50 px-2 py-2 text-center text-[10px] font-extrabold text-brand-700">10:00</span>
+                      <span class="rounded-lg border border-zinc-200 bg-white px-2 py-2 text-center text-[10px] font-extrabold text-zinc-600">11:30</span>
+                      <span class="rounded-lg border border-zinc-200 bg-white px-2 py-2 text-center text-[10px] font-extrabold text-zinc-600">14:00</span>
+                      <span class="rounded-lg border border-zinc-200 bg-white px-2 py-2 text-center text-[10px] font-extrabold text-zinc-600">16:30</span>
+                      <span class="rounded-lg border border-zinc-200 bg-white px-2 py-2 text-center text-[10px] font-extrabold text-zinc-600">17:00</span>
+                      <span class="rounded-lg border border-zinc-200 bg-white px-2 py-2 text-center text-[10px] font-extrabold text-zinc-600">18:30</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <section class="bg-white py-20 sm:py-24">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+      <div class="mx-auto max-w-3xl text-center">
+        <span class="text-xs font-extrabold uppercase tracking-[.18em] text-brand-700">Una agenda que trabaja por vos</span>
+        <h2 class="mt-4 text-3xl font-black tracking-[-.035em] text-zinc-950 sm:text-5xl">
+          Tus clientes no deberían esperar una respuesta para reservar
+        </h2>
+        <p class="mt-5 text-base leading-7 text-zinc-500 sm:text-lg">
+          HolaTurno transforma consultas repetitivas en reservas claras, ordenadas y disponibles a cualquier hora.
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-5 md:grid-cols-3">
+        <article class="rounded-[26px] border border-zinc-100 bg-zinc-50 p-6">
+          <span class="grid h-12 w-12 place-items-center rounded-2xl bg-rose-50 text-rose-600">
+            <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M4 5h16v11H7l-3 3V5Z"/><path d="M8 9h8M8 12h5"/>
+            </svg>
+          </span>
+          <h3 class="mt-5 text-lg font-black text-zinc-950">Menos ida y vuelta</h3>
+          <p class="mt-2 text-sm leading-6 text-zinc-500">Evitá responder una y otra vez qué horarios tenés disponibles.</p>
+        </article>
+
+        <article class="rounded-[26px] border border-zinc-100 bg-zinc-50 p-6">
+          <span class="grid h-12 w-12 place-items-center rounded-2xl bg-brand-50 text-brand-700">
+            <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M4 7h16M6 3v4M18 3v4M5 5h14a1 1 0 0 1 1 1v14H4V6a1 1 0 0 1 1-1Z"/><path d="m8.5 14 2 2 5-5"/>
+            </svg>
+          </span>
+          <h3 class="mt-5 text-lg font-black text-zinc-950">Agenda actualizada</h3>
+          <p class="mt-2 text-sm leading-6 text-zinc-500">Mostrá únicamente los días y horarios que realmente querés ofrecer.</p>
+        </article>
+
+        <article class="rounded-[26px] border border-zinc-100 bg-zinc-50 p-6">
+          <span class="grid h-12 w-12 place-items-center rounded-2xl bg-emerald-50 text-emerald-600">
+            <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M4 12h16M12 4v16"/><circle cx="12" cy="12" r="9"/>
+            </svg>
+          </span>
+          <h3 class="mt-5 text-lg font-black text-zinc-950">Más oportunidades</h3>
+          <p class="mt-2 text-sm leading-6 text-zinc-500">Tu página sigue recibiendo turnos incluso cuando no estás conectado.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="como-funciona" class="bg-[#F7F7FA] py-20 sm:py-24">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+      <div class="grid gap-12 lg:grid-cols-[.82fr_1.18fr] lg:items-center">
+        <div>
+          <span class="text-xs font-extrabold uppercase tracking-[.18em] text-brand-700">Simple desde el primer día</span>
+          <h2 class="mt-4 text-3xl font-black tracking-[-.035em] text-zinc-950 sm:text-5xl">
+            Configurás una vez. Después, compartís tu link.
+          </h2>
+          <p class="mt-5 max-w-xl text-base leading-7 text-zinc-500 sm:text-lg">
+            HolaTurno te guía para publicar tu página de reservas sin conocimientos técnicos.
+          </p>
+          <a href="#contacto" class="mt-7 inline-flex items-center gap-2 rounded-2xl bg-ink px-5 py-3 text-sm font-extrabold text-white transition hover:bg-zinc-800">
+            Quiero recibir novedades
+            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m9 18 6-6-6-6"/></svg>
+          </a>
+        </div>
+
+        <div class="grid gap-4">
+          <article class="glass rounded-[26px] border border-white p-5 shadow-card sm:p-6">
+            <div class="flex items-start gap-4">
+              <span class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-ink text-sm font-black text-white">1</span>
+              <div>
+                <h3 class="text-lg font-black text-zinc-950">Creá tu perfil</h3>
+                <p class="mt-2 text-sm leading-6 text-zinc-500">Elegí el nombre de tu página y obtené un link propio para compartir.</p>
+                <div class="mt-4 rounded-2xl border border-brand-100 bg-brand-50/70 px-4 py-3">
+                  <p class="text-[10px] font-extrabold uppercase tracking-[.14em] text-brand-700">Tu página</p>
+                  <p class="mt-1 text-sm font-black text-zinc-900">holaturno.com/estetica-olivia</p>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="glass rounded-[26px] border border-white p-5 shadow-card sm:p-6">
+            <div class="flex items-start gap-4">
+              <span class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-brand-600 text-sm font-black text-white">2</span>
+              <div>
+                <h3 class="text-lg font-black text-zinc-950">Definí tus horarios y servicios</h3>
+                <p class="mt-2 text-sm leading-6 text-zinc-500">Indicá cuándo atendés, cuánto dura cada servicio y qué precio querés mostrar.</p>
+                <div class="mt-4 flex flex-wrap gap-2">
+                  <span class="rounded-full bg-white px-3 py-1.5 text-xs font-bold text-zinc-600 shadow-sm">Manicuría · 75 min</span>
+                  <span class="rounded-full bg-white px-3 py-1.5 text-xs font-bold text-zinc-600 shadow-sm">Criolipólisis · 60 min</span>
+                  <span class="rounded-full bg-white px-3 py-1.5 text-xs font-bold text-zinc-600 shadow-sm">Depilación · 30 min</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="glass rounded-[26px] border border-white p-5 shadow-card sm:p-6">
+            <div class="flex items-start gap-4">
+              <span class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-emerald-500 text-sm font-black text-white">3</span>
+              <div>
+                <h3 class="text-lg font-black text-zinc-950">Empezá a recibir reservas</h3>
+                <p class="mt-2 text-sm leading-6 text-zinc-500">Compartí tu link en Instagram, WhatsApp o tu sitio web y centralizá todo en tu agenda.</p>
+                <div class="mt-4 flex items-center gap-3 rounded-2xl bg-emerald-50 px-4 py-3 text-emerald-700">
+                  <svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg>
+                  <span class="text-sm font-black">Tu página ya está lista para reservar</span>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="beneficios" class="bg-white py-20 sm:py-24">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+      <div class="max-w-3xl">
+        <span class="text-xs font-extrabold uppercase tracking-[.18em] text-brand-700">Pensado para el trabajo real</span>
+        <h2 class="mt-4 text-3xl font-black tracking-[-.035em] text-zinc-950 sm:text-5xl">
+          Todo lo necesario para ordenar tus reservas
+        </h2>
+      </div>
+
+      <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <article class="rounded-[26px] border border-zinc-100 p-6 transition hover:-translate-y-1 hover:shadow-card">
+          <span class="grid h-11 w-11 place-items-center rounded-2xl bg-brand-50 text-brand-700">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M6 3v4M18 3v4M5 5h14a1 1 0 0 1 1 1v14H4V6a1 1 0 0 1 1-1Z"/></svg>
+          </span>
+          <h3 class="mt-5 font-black text-zinc-950">Agenda visual</h3>
+          <p class="mt-2 text-sm leading-6 text-zinc-500">Consultá tus reservas y mantené el día organizado.</p>
+        </article>
+
+        <article class="rounded-[26px] border border-zinc-100 p-6 transition hover:-translate-y-1 hover:shadow-card">
+          <span class="grid h-11 w-11 place-items-center rounded-2xl bg-fuchsia-50 text-fuchsia-600">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M12 5v14"/><circle cx="12" cy="12" r="9"/></svg>
+          </span>
+          <h3 class="mt-5 font-black text-zinc-950">Servicios personalizados</h3>
+          <p class="mt-2 text-sm leading-6 text-zinc-500">Definí duración, precio y disponibilidad según cada tratamiento.</p>
+        </article>
+
+        <article class="rounded-[26px] border border-zinc-100 p-6 transition hover:-translate-y-1 hover:shadow-card">
+          <span class="grid h-11 w-11 place-items-center rounded-2xl bg-emerald-50 text-emerald-600">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v14H4z"/><path d="m4 7 8 6 8-6"/></svg>
+          </span>
+          <h3 class="mt-5 font-black text-zinc-950">Confirmaciones claras</h3>
+          <p class="mt-2 text-sm leading-6 text-zinc-500">El cliente recibe los detalles del turno al finalizar la reserva.</p>
+        </article>
+
+        <article class="rounded-[26px] border border-zinc-100 p-6 transition hover:-translate-y-1 hover:shadow-card">
+          <span class="grid h-11 w-11 place-items-center rounded-2xl bg-sky-50 text-sky-600">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z"/><path d="M12 7v5l3 2"/></svg>
+          </span>
+          <h3 class="mt-5 font-black text-zinc-950">Horarios bajo tu control</h3>
+          <p class="mt-2 text-sm leading-6 text-zinc-500">Mostrá solo los días y franjas horarias que quieras ofrecer.</p>
+        </article>
+
+        <article class="rounded-[26px] border border-zinc-100 p-6 transition hover:-translate-y-1 hover:shadow-card">
+          <span class="grid h-11 w-11 place-items-center rounded-2xl bg-amber-50 text-amber-600">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 7h8M7 11h10M9 15h6"/><rect x="4" y="3" width="16" height="18" rx="3"/></svg>
+          </span>
+          <h3 class="mt-5 font-black text-zinc-950">Ficha de cada reserva</h3>
+          <p class="mt-2 text-sm leading-6 text-zinc-500">Guardá nombre, contacto y comentarios relevantes de cada cliente.</p>
+        </article>
+
+        <article class="rounded-[26px] border border-zinc-100 p-6 transition hover:-translate-y-1 hover:shadow-card">
+          <span class="grid h-11 w-11 place-items-center rounded-2xl bg-rose-50 text-rose-600">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h16M12 4v16"/><circle cx="12" cy="12" r="9"/></svg>
+          </span>
+          <h3 class="mt-5 font-black text-zinc-950">Experiencia profesional</h3>
+          <p class="mt-2 text-sm leading-6 text-zinc-500">Una página moderna y fácil de usar desde cualquier dispositivo.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="para-quien" class="bg-[#F7F7FA] py-20 sm:py-24">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+      <div class="mx-auto max-w-3xl text-center">
+        <span class="text-xs font-extrabold uppercase tracking-[.18em] text-brand-700">Hecho para servicios con agenda</span>
+        <h2 class="mt-4 text-3xl font-black tracking-[-.035em] text-zinc-950 sm:text-5xl">
+          Adaptable a distintos tipos de profesionales
+        </h2>
+      </div>
+
+      <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <article class="rounded-[26px] border border-white bg-white p-6 shadow-sm">
+          <span class="grid h-12 w-12 place-items-center rounded-2xl bg-rose-50 text-rose-600">✦</span>
+          <h3 class="mt-5 font-black text-zinc-950">Centros de estética</h3>
+          <p class="mt-2 text-sm leading-6 text-zinc-500">Uñas, depilación, faciales, masajes y tratamientos corporales.</p>
+        </article>
+
+        <article class="rounded-[26px] border border-white bg-white p-6 shadow-sm">
+          <span class="grid h-12 w-12 place-items-center rounded-2xl bg-brand-50 text-brand-700">✂</span>
+          <h3 class="mt-5 font-black text-zinc-950">Peluquerías y barberías</h3>
+          <p class="mt-2 text-sm leading-6 text-zinc-500">Cortes, color, peinados, barba y servicios combinados.</p>
+        </article>
+
+        <article class="rounded-[26px] border border-white bg-white p-6 shadow-sm">
+          <span class="grid h-12 w-12 place-items-center rounded-2xl bg-emerald-50 text-emerald-600">◎</span>
+          <h3 class="mt-5 font-black text-zinc-950">Consultorios y terapeutas</h3>
+          <p class="mt-2 text-sm leading-6 text-zinc-500">Psicología, nutrición, kinesiología y otras consultas.</p>
+        </article>
+
+        <article class="rounded-[26px] border border-white bg-white p-6 shadow-sm">
+          <span class="grid h-12 w-12 place-items-center rounded-2xl bg-sky-50 text-sky-600">⌂</span>
+          <h3 class="mt-5 font-black text-zinc-950">Profesionales independientes</h3>
+          <p class="mt-2 text-sm leading-6 text-zinc-500">Clases, asesorías, sesiones y servicios personalizados.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white px-5 py-10 sm:px-8">
+    <div class="mx-auto max-w-7xl overflow-hidden rounded-[32px] bg-ink px-6 py-10 text-white shadow-soft sm:px-10 sm:py-12 lg:flex lg:items-center lg:justify-between">
+      <div>
+        <span class="text-xs font-extrabold uppercase tracking-[.18em] text-brand-300">Tu agenda puede ser más simple</span>
+        <h2 class="mt-3 max-w-2xl text-3xl font-black tracking-tight sm:text-4xl">
+          Empezá a construir una experiencia de reserva profesional
+        </h2>
+      </div>
+      <a href="#contacto" class="mt-7 inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3 text-sm font-extrabold text-zinc-900 transition hover:-translate-y-0.5 lg:mt-0">
+        Quiero recibir novedades
+        <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m9 18 6-6-6-6"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <section id="preguntas" class="bg-white py-20 sm:py-24">
+    <div class="mx-auto grid max-w-7xl gap-12 px-5 sm:px-8 lg:grid-cols-[.7fr_1.3fr] lg:px-10">
+      <div>
+        <span class="text-xs font-extrabold uppercase tracking-[.18em] text-brand-700">Preguntas frecuentes</span>
+        <h2 class="mt-4 text-3xl font-black tracking-[-.035em] text-zinc-950 sm:text-5xl">
+          Lo importante, antes de empezar
+        </h2>
+      </div>
+
+      <div class="space-y-3">
+        <article class="faq-item rounded-2xl border border-zinc-200 bg-white" data-open="true">
+          <button type="button" class="faq-button flex w-full items-center justify-between gap-4 px-5 py-5 text-left">
+            <span class="font-black text-zinc-900">¿Necesito tener una página web?</span>
+            <span class="faq-icon grid h-8 w-8 shrink-0 place-items-center rounded-full bg-zinc-100 text-zinc-600 transition">+</span>
+          </button>
+          <div class="faq-content"><div><p class="px-5 pb-5 text-sm leading-6 text-zinc-500">No. HolaTurno te brinda una página pública propia que podés compartir directamente en Instagram, WhatsApp o cualquier otro canal.</p></div></div>
+        </article>
+
+        <article class="faq-item rounded-2xl border border-zinc-200 bg-white" data-open="false">
+          <button type="button" class="faq-button flex w-full items-center justify-between gap-4 px-5 py-5 text-left">
+            <span class="font-black text-zinc-900">¿Puedo configurar distintos servicios?</span>
+            <span class="faq-icon grid h-8 w-8 shrink-0 place-items-center rounded-full bg-zinc-100 text-zinc-600 transition">+</span>
+          </button>
+          <div class="faq-content"><div><p class="px-5 pb-5 text-sm leading-6 text-zinc-500">Sí. Cada servicio puede tener su propio nombre, duración, precio y disponibilidad.</p></div></div>
+        </article>
+
+        <article class="faq-item rounded-2xl border border-zinc-200 bg-white" data-open="false">
+          <button type="button" class="faq-button flex w-full items-center justify-between gap-4 px-5 py-5 text-left">
+            <span class="font-black text-zinc-900">¿Puedo elegir los días y horarios disponibles?</span>
+            <span class="faq-icon grid h-8 w-8 shrink-0 place-items-center rounded-full bg-zinc-100 text-zinc-600 transition">+</span>
+          </button>
+          <div class="faq-content"><div><p class="px-5 pb-5 text-sm leading-6 text-zinc-500">Sí. Vos definís tu horario habitual y desde el panel podrás administrar cambios y excepciones.</p></div></div>
+        </article>
+
+        <article class="faq-item rounded-2xl border border-zinc-200 bg-white" data-open="false">
+          <button type="button" class="faq-button flex w-full items-center justify-between gap-4 px-5 py-5 text-left">
+            <span class="font-black text-zinc-900">¿Sirve solo para centros de estética?</span>
+            <span class="faq-icon grid h-8 w-8 shrink-0 place-items-center rounded-full bg-zinc-100 text-zinc-600 transition">+</span>
+          </button>
+          <div class="faq-content"><div><p class="px-5 pb-5 text-sm leading-6 text-zinc-500">No. Está pensado para cualquier profesional o negocio que trabaje con turnos y servicios.</p></div></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto" class="bg-[#F7F7FA] py-20 sm:py-24">
+    <div class="mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 lg:grid-cols-[.85fr_1.15fr] lg:px-10">
+      <div>
+        <span class="text-xs font-extrabold uppercase tracking-[.18em] text-brand-700">Conocé HolaTurno</span>
+        <h2 class="mt-4 text-3xl font-black tracking-[-.035em] text-zinc-950 sm:text-5xl">Contanos sobre tu negocio</h2>
+        <p class="mt-5 max-w-xl text-base leading-7 text-zinc-500">
+          Dejanos tus datos y te contactaremos para mostrarte cómo podría funcionar HolaTurno en tu caso.
+        </p>
+
+        <div class="mt-8 space-y-4">
+          <div class="flex items-start gap-4">
+            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-white text-brand-700 shadow-sm">✉</span>
+            <div>
+              <p class="font-black text-zinc-900">Respuesta personalizada</p>
+              <p class="mt-1 text-sm leading-6 text-zinc-500">Analizamos tu tipo de negocio y tus necesidades.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-white text-emerald-600 shadow-sm">✓</span>
+            <div>
+              <p class="font-black text-zinc-900">Sin compromiso</p>
+              <p class="mt-1 text-sm leading-6 text-zinc-500">El formulario es solo para conocer tu interés y mantenerte informado.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rounded-[30px] border border-white bg-white p-5 shadow-soft sm:p-7 lg:p-8">
+        <!-- Reemplazá TU_ID_DE_FORMSPREE por el ID real de tu formulario -->
+        <form id="contactForm" action="https://formspree.io/f/TU_ID_DE_FORMSPREE" method="POST" class="space-y-5">
+          <input type="hidden" name="_subject" value="Nuevo contacto desde HolaTurno">
+          <input type="text" name="_gotcha" class="hidden" tabindex="-1" autocomplete="off">
+
+          <div class="grid gap-5 sm:grid-cols-2">
+            <div>
+              <label for="name" class="mb-2 block text-sm font-bold text-zinc-800">Nombre</label>
+              <input id="name" name="name" type="text" autocomplete="name" required class="h-12 w-full rounded-2xl border border-zinc-200 bg-white px-4 text-sm font-semibold outline-none transition placeholder:text-zinc-400 focus:border-brand-400 focus:ring-4 focus:ring-brand-100" placeholder="Tu nombre">
+            </div>
+            <div>
+              <label for="business" class="mb-2 block text-sm font-bold text-zinc-800">Negocio o profesión</label>
+              <input id="business" name="business" type="text" required class="h-12 w-full rounded-2xl border border-zinc-200 bg-white px-4 text-sm font-semibold outline-none transition placeholder:text-zinc-400 focus:border-brand-400 focus:ring-4 focus:ring-brand-100" placeholder="Ej. Centro de estética">
+            </div>
+          </div>
+
+          <div class="grid gap-5 sm:grid-cols-2">
+            <div>
+              <label for="email" class="mb-2 block text-sm font-bold text-zinc-800">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email" required class="h-12 w-full rounded-2xl border border-zinc-200 bg-white px-4 text-sm font-semibold outline-none transition placeholder:text-zinc-400 focus:border-brand-400 focus:ring-4 focus:ring-brand-100" placeholder="nombre@email.com">
+            </div>
+            <div>
+              <label for="phone" class="mb-2 block text-sm font-bold text-zinc-800">Teléfono</label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" class="h-12 w-full rounded-2xl border border-zinc-200 bg-white px-4 text-sm font-semibold outline-none transition placeholder:text-zinc-400 focus:border-brand-400 focus:ring-4 focus:ring-brand-100" placeholder="+54 11 5555 5555">
+            </div>
+          </div>
+
+          <div>
+            <label for="businessType" class="mb-2 block text-sm font-bold text-zinc-800">¿Qué tipo de actividad realizás?</label>
+            <div class="relative">
+              <select id="businessType" name="business_type" required class="h-12 w-full appearance-none rounded-2xl border border-zinc-200 bg-white px-4 pr-11 text-sm font-semibold outline-none transition focus:border-brand-400 focus:ring-4 focus:ring-brand-100">
+                <option value="">Seleccionar una opción</option>
+                <option>Centro de estética</option>
+                <option>Peluquería o barbería</option>
+                <option>Consultorio o terapia</option>
+                <option>Profesional independiente</option>
+                <option>Otro</option>
+              </select>
+              <svg viewBox="0 0 24 24" class="pointer-events-none absolute right-4 top-4 h-4 w-4 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+          </div>
+
+          <div>
+            <label for="message" class="mb-2 block text-sm font-bold text-zinc-800">Contanos qué necesitás</label>
+            <textarea id="message" name="message" rows="5" class="w-full resize-none rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm font-semibold outline-none transition placeholder:text-zinc-400 focus:border-brand-400 focus:ring-4 focus:ring-brand-100" placeholder="Por ejemplo: cuántos profesionales atienden, cuántos servicios ofrecés o cómo administrás hoy tus turnos."></textarea>
+          </div>
+
+          <label class="flex cursor-pointer items-start gap-3 rounded-2xl border border-zinc-100 bg-zinc-50 p-4">
+            <input name="contact_consent" type="checkbox" required class="mt-0.5 h-4 w-4 rounded border-zinc-300 text-brand-600 focus:ring-brand-500">
+            <span class="text-xs leading-5 text-zinc-500">Acepto que HolaTurno utilice estos datos para responder mi consulta.</span>
+          </label>
+
+          <div id="formStatus" class="hidden rounded-2xl px-4 py-3 text-sm font-bold"></div>
+
+          <button id="submitButton" type="submit" class="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-brand-700 to-fuchsia-600 px-5 text-sm font-extrabold text-white shadow-glow transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60">
+            <span id="submitButtonText">Enviar consulta</span>
+            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+
+          <p class="text-center text-[11px] leading-5 text-zinc-400">Este formulario utiliza Formspree para procesar el envío.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="border-t border-zinc-100 bg-white">
+    <div class="mx-auto flex max-w-7xl flex-col gap-6 px-5 py-8 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:px-10">
+      <div class="flex items-center gap-3">
+        <span class="grid h-9 w-9 place-items-center rounded-xl bg-ink text-white">
+          <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3v3M17 3v3M4.5 9.5h15M6 5h12a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/><path d="m9 14 2 2 4-4"/></svg>
+        </span>
+        <div>
+          <p class="font-black text-zinc-900">HolaTurno</p>
+          <p class="text-xs font-semibold text-zinc-400">Reservas simples para negocios reales.</p>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-x-5 gap-y-2 text-xs font-bold text-zinc-400">
+        <a href="#inicio" class="transition hover:text-zinc-700">Inicio</a>
+        <a href="#beneficios" class="transition hover:text-zinc-700">Beneficios</a>
+        <a href="#preguntas" class="transition hover:text-zinc-700">Preguntas</a>
+        <a href="#contacto" class="transition hover:text-zinc-700">Contacto</a>
+      </div>
+
+      <p class="text-xs font-semibold text-zinc-400">© 2026 HolaTurno</p>
+    </div>
+  </footer>
+
+  <script>
+    const mobileMenuButton = document.getElementById("mobileMenuButton");
+    const mobileMenu = document.getElementById("mobileMenu");
+
+    mobileMenuButton.addEventListener("click", () => {
+      const isOpen = mobileMenuButton.getAttribute("aria-expanded") === "true";
+      mobileMenuButton.setAttribute("aria-expanded", String(!isOpen));
+      mobileMenu.classList.toggle("hidden", isOpen);
+    });
+
+    document.querySelectorAll(".mobile-link").forEach((link) => {
+      link.addEventListener("click", () => {
+        mobileMenu.classList.add("hidden");
+        mobileMenuButton.setAttribute("aria-expanded", "false");
+      });
+    });
+
+    document.querySelectorAll(".faq-button").forEach((button) => {
+      button.addEventListener("click", () => {
+        const item = button.closest(".faq-item");
+        const wasOpen = item.dataset.open === "true";
+        document.querySelectorAll(".faq-item").forEach((faq) => faq.dataset.open = "false");
+        item.dataset.open = String(!wasOpen);
+      });
+    });
+
+    const contactForm = document.getElementById("contactForm");
+    const formStatus = document.getElementById("formStatus");
+    const submitButton = document.getElementById("submitButton");
+    const submitButtonText = document.getElementById("submitButtonText");
+
+    contactForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const endpoint = contactForm.getAttribute("action");
+
+      if (endpoint.includes("TU_ID_DE_FORMSPREE")) {
+        formStatus.className = "rounded-2xl bg-amber-50 px-4 py-3 text-sm font-bold text-amber-700";
+        formStatus.textContent = "Antes de publicar, reemplazá TU_ID_DE_FORMSPREE por el ID real de tu formulario.";
+        return;
+      }
+
+      submitButton.disabled = true;
+      submitButtonText.textContent = "Enviando...";
+      formStatus.classList.add("hidden");
+
+      try {
+        const response = await fetch(endpoint, {
+          method: "POST",
+          body: new FormData(contactForm),
+          headers: { Accept: "application/json" },
+        });
+
+        if (!response.ok) throw new Error("No se pudo enviar el formulario.");
+
+        contactForm.reset();
+        formStatus.className = "rounded-2xl bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-700";
+        formStatus.textContent = "Gracias. Recibimos tu consulta y te responderemos pronto.";
+      } catch (error) {
+        formStatus.className = "rounded-2xl bg-rose-50 px-4 py-3 text-sm font-bold text-rose-700";
+        formStatus.textContent = "No pudimos enviar la consulta. Revisá tu conexión o intentá nuevamente.";
+      } finally {
+        submitButton.disabled = false;
+        submitButtonText.textContent = "Enviar consulta";
+      }
+    });
+  </script>
+</body>
+</html>
